@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Umi Sushi | Jacksonville, OR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-blue: #a8dadc;
+            --dark-bg: #0b132b;
+            --navy-panel: #1d3557;
+            --card-bg: #457b9d;
+            --light-text: #f1faee;
+            --call-green: #2a9d8f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--dark-bg); 
+            color: var(--light-text); 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- FIXED MOBILE BACKGROUND PHOTO --- */
+        header {
+            position: relative;
+            min-height: 85vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            /* High-compatibility mobile background settings */
+            background-image: linear-gradient(rgba(11, 19, 43, 0.75), rgba(11, 19, 43, 0.85)), 
+                              url('https://images.unsplash.com/photo-1583623025817-d180a2221d0a?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: scroll; /* Changed from 'fixed' which often breaks on mobile */
+        }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 12vw, 5rem); color: var(--accent-blue); line-height: 1.1; margin-bottom: 10px; }
+        .tagline { font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; color: #fff; opacity: 0.9; }
+
+        .cta-group { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 12px; }
+        .btn { padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 600; text-transform: uppercase; text-align: center; font-size: 0.9rem; transition: 0.3s; }
+        .btn-call { background-color: var(--call-green); color: white; }
+        .btn-primary { background-color: var(--accent-blue); color: var(--navy-panel); }
+        .btn-menu { border: 2px solid var(--accent-blue); color: var(--accent-blue); }
+
+        /* --- 1-BY-1 CAROUSEL --- */
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; 
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        .carousel-item {
+            min-width: 100vw;
+            scroll-snap-align: start;
+            padding: 0 25px;
+        }
+
+        .card-content {
+            background: var(--card-bg);
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .card-content h4 { color: #fff; font-size: 1.4rem; margin-bottom: 12px; text-transform: uppercase; border-bottom: 2px solid var(--accent-blue); display: inline-block; padding-bottom: 5px; }
+
+        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .dot { width: 8px; height: 8px; background-color: rgba(168, 218, 220, 0.3); border-radius: 50%; }
+        .dot.active { background-color: var(--accent-blue); transform: scale(1.3); }
+
+        /* --- SECTIONS --- */
+        section { padding: 50px 0; }
+        h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--accent-blue); text-align: center; margin-bottom: 10px; }
+        .swipe-hint { text-align: center; font-size: 0.7rem; opacity: 0.6; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+
+        .history-box { background: var(--navy-panel); padding: 45px 25px; text-align: center; margin: 0 20px; border-radius: 20px; }
+        
+        .review-card-content { background: rgba(255,255,255,0.05); border-top: 4px solid var(--accent-blue); }
+        .stars { color: #ffcc00; margin-bottom: 10px; font-size: 1.2rem; }
+
+        /* --- INTEGRATED FOOTER --- */
+        footer { padding: 60px 20px 130px 20px; text-align: center; background: #050a18; }
+        .footer-section { margin-bottom: 35px; }
+        .footer-section strong { display: block; color: var(--accent-blue); margin-bottom: 10px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .map-link { color: var(--light-text); text-decoration: underline; font-size: 1.1rem; }
+        
+        .hours-list { list-style: none; max-width: 250px; margin: 0 auto; line-height: 1.8; }
+        .hours-list li { display: flex; justify-content: space-between; }
+        .hours-list li span { color: var(--accent-blue); font-weight: 600; }
+
+        .mobile-action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--navy-panel);
+            display: flex;
+            padding: 15px;
+            gap: 12px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .action-btn { flex: 1; padding: 18px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; }
+
+        @media (min-width: 1024px) {
+            .mobile-action-bar, .dots-container, .swipe-hint { display: none; }
+            .carousel-container { 
+                display: grid; 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 25px; 
+                overflow: visible;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 40px;
+            }
+            .carousel-item { min-width: auto; padding: 0; }
+            .cta-group { flex-direction: row; max-width: 900px; justify-content: center; }
+            footer { padding-bottom: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>UMI SUSHI</h1>
+        <p class="tagline">Authentic Japanese • Jacksonville, Oregon</p>
+        <div class="cta-group">
+            <a href="tel:5417022258" class="btn btn-call">📞 Call Now</a>
+            <a href="https://www.yelp.com/biz/umi-sushi-jacksonville" target="_blank" class="btn btn-primary">Book Table</a>
+            <a href="https://www.zmenu.com/umi-sushi-jacksonville-online-menu/" target="_blank" class="btn btn-menu">Full Menu</a>
+        </div>
+    </header>
+
+    <section>
+        <div class="history-box">
+            <h2>Our Legacy</h2>
+            <p style="font-style: italic; opacity: 0.9;">For over 12 year, Umi Sushi has been at the heart of the Jacksonville dining scene. Located in a historic building on California Street, we take pride in serving our community with the freshest ingredients and a legacy of culinary excellence.&nbsp;&nbsp;</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Local Favorites</h2>
+        <p class="swipe-hint">Swipe to explore menu items</p>
+        <div class="carousel-container">
+            <div class="carousel-item"><div class="card-content"><h4>Hamachi Kama</h4><p>Grilled yellowtail collar—our most sought-after appetizer. Perfectly crisp skin with buttery, tender meat. Served with ponzu.</p></div></div>
+            <div class="carousel-item"><div class="card-content"><h4>Lion King Roll</h4><p>California roll base topped with salmon and secret Umi cream sauce, then baked. Finished with unagi sauce and tobiko.</p></div></div>
+            <div class="carousel-item"><div class="card-content"><h4>Chicken Bento</h4><p>Voted best in the NW. Grilled chicken, tempura, gyoza, salad, rice, and fresh orange. A massive, satisfying meal.</p></div></div>
+            <div class="carousel-item"><div class="card-content"><h4>Crunch Munch</h4><p>Spicy tuna and shrimp tempura inside, topped with succulent ebi, tempura crunchies, and unagi sauce drizzle.</p></div></div>
+            <div class="carousel-item"><div class="card-content"><h4>Extra Spicy Roll</h4><p>For heat lovers. High-grade spicy tuna and habanero infusions for a clean, searing heat that respects the fish.</p></div></div>
+            <div class="carousel-item"><div class="card-content"><h4>California Roll</h4><p>The gold standard. Real crab salad and highest-grade avocado ensure every bite is creamy, fresh, and satisfying.</p></div></div>
+        </div>
+        <div class="dots-container"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </section>
+
+    <section style="background: rgba(29, 53, 87, 0.2);">
+        <h2>Guest Reviews</h2>
+        <p class="swipe-hint">Swipe for more experiences</p>
+        <div class="carousel-container">
+            <div class="carousel-item"><div class="card-content review-card-content"><div class="stars">★★★★★</div><p>"The fish quality is so fresh. It's not much different from the sashimi I used to eat in Japan. Very delicious!"</p><p style="margin-top:15px;"><strong>- Liya E.</strong></p></div></div>
+            <div class="carousel-item"><div class="card-content review-card-content"><div class="stars">★★★★★</div><p>"Extremely friendly staff, skilled sushi chefs, and a comfortable atmosphere! The bento box is a favorite."</p><p style="margin-top:15px;"><strong>- Lauren P.</strong></p></div></div>
+            <div class="carousel-item"><div class="card-content review-card-content"><div class="stars">★★★★★</div><p>"One of the best sushi spots in Southern Oregon. The Lion King roll is to die for, and the service is always top-notch."</p><p style="margin-top:15px;"><strong>- Steven R.</strong></p></div></div>
+            <div class="carousel-item"><div class="card-content review-card-content"><div class="stars">★★★★★</div><p>"The baked mussels and hamachi kama are must-tries. Fresh, flavorful, and beautifully presented every time."</p><p style="margin-top:15px;"><strong>- Nina N.</strong></p></div></div>
+            <div class="carousel-item"><div class="card-content review-card-content"><div class="stars">★★★★★</div><p>"Truthfully the best bento box I've ever had. even SF, Seattle, and Portland."</p>
+            <p style="margin-top:15px;"><strong>- WeatherBroker</strong></p></div></div>
+            <div class="carousel-item"><div class="card-content review-card-content"><div class="stars">★★★★★</div><p>"I have celiac and they were more than happy to accommodate me with gluten-free options. Definitely coming back!"</p><p style="margin-top:15px;"><strong>- dcDalton</strong></p></div></div>
+        </div>
+        <div class="dots-container"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </section>
+
+    <footer>
+        <div class="footer-section">
+            <strong>Hours of Operation</strong>
+            <ul class="hours-list">
+                <li><span>Mon - Thu:</span> 11:30AM – 8:30PM</li>
+                <li><span>Fri - Sat:</span> 11:30AM – 9:00PM</li>
+                <li><span>Sunday:</span> Closed</li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <strong>Visit Umi Sushi</strong>
+            <a href="https://www.google.com/maps/dir//Umi+Sushi,+100+E+California+St,+Jacksonville,+OR+97530" target="_blank" class="map-link">
+                100 E California St, Jacksonville, OR
+            </a>
+        </div>
+
+        <div class="footer-section">
+            <strong>Contact</strong>
+            <p><a href="tel:5417022258" style="color: var(--accent-blue); text-decoration: none; font-size: 1.2rem; font-weight: 600;">(541) 702-2258</a></p>
+        </div>
+
+        <p style="margin-top: 20px; font-size: 0.7rem; opacity: 0.4;">© 2026 Umi Sushi Jacksonville.</p>
+    </footer>
+
+    <div class="mobile-action-bar">
+        <a href="tel:5417022258" class="action-btn" style="background: var(--call-green); color: white;">📞 Call Now</a>
+        <a href="https://www.google.com/maps/dir//Umi+Sushi,+100+E+California+St,+Jacksonville,+OR+97530" target="_blank" class="action-btn" style="background: #fff; color: var(--navy-panel);">📍 Directions</a>
+    </div>
+
+</body>
+</html>
